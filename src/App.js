@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import './App.css'
 
-function App() {
+function AddAssignment() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+    <div><input type="number"/></div>
+    </>
+  )
 }
 
-export default App;
+function GradeCalculator() {
+  const [currentGrade, setCurrentGrade] = useState(null)
+  return (
+  <div className="background-app">
+    <div className="background-grades">
+      <div className="display-grade">
+        Grade Calculator
+        <br />
+        00.00%
+      </div>
+      <div className="assignments">
+        <AddAssignment>
+        </AddAssignment>
+      </div>
+    </div>
+    </div>
+  )
+}
+
+export default GradeCalculator;
