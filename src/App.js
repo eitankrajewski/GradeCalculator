@@ -2,22 +2,29 @@ import { useState } from 'react'
 import './App.css'
 
 function AddAssignment() {
+  function handleSubmit() {
+    
+  }
   return (
     <>
-    <div><input type="number"/></div>
+    <form>
+    <div><input type="number" placeholder='Enter assignment/assessment grade'/></div>
+    <div><input type="dropdown" placeholder='Enter grade category'/></div>
+    <button type="submit" onClick={handleSubmit}></button>
+    </form>
     </>
   )
 }
 
 function GradeCalculator() {
-  const [currentGrade, setCurrentGrade] = useState(null)
+  const [currentGrade, setCurrentGrade] = useState(0)
   return (
   <div className="background-app">
     <div className="background-grades">
       <div className="display-grade">
         Grade Calculator
         <br />
-        00.00%
+        {currentGrade}
       </div>
       <div className="assignments">
         <AddAssignment>
