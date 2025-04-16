@@ -12,6 +12,7 @@ function AddAssignment() {
   function handleSubmit(e) {
     e.preventDefault();
     setAssignments(previousAssignments => [...previousAssignments, newAssignment]);
+    console.log(newAssignment)
     setNewAssignment({
       assignmentGrade: '',
       assignmentCategory: ''
@@ -21,7 +22,7 @@ function AddAssignment() {
   }
   function handleChange(e) {
     const { name, value } = e.target;
-
+    
     setNewAssignment(previousNewAssignments => ({
       ...previousNewAssignments,
       [name]: value
@@ -32,7 +33,11 @@ function AddAssignment() {
     <>
     <form>
     <div>
-      <input type="number" 
+      <input 
+      type="number" 
+      min={0}
+      max={100}
+      name="assignmentGrade"
       placeholder='Enter assignment/assessment grade' 
       value={newAssignment.assignmentGrade}
       onChange={handleChange}
@@ -48,10 +53,9 @@ function AddAssignment() {
         <option value="">Select an assignment type</option>
         <option value="Assignment">Assignment</option>
         <option value="Assessment">Summative Assessment</option>
-        <option value="Other 1">Select an assignment type</option>
       </select>
     </div>
-    <button type="submit" onClick={handleSubmit}></button>
+    <button type="submit" onClick={handleSubmit}>Add Assignment</button>
     </form>
     </>
   )
