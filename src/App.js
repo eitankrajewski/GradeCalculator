@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import './components/Assignments'
+import AssignmentsForm from './components/AssignmentsForm'
 
 
 function GradeCalculator() {
@@ -19,8 +19,8 @@ function GradeCalculator() {
           assignments
         });
       </ul> */}
-        <AddAssignment>
-        </AddAssignment>
+        {/* <AssignmentsDisplay /> */}
+        <AssignmentsForm />
       </div>
     </div>
     </div>

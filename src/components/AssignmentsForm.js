@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-function Assignments() {
+function AssignmentsForm() {
 
-    const [assignments, setAssignments] = useState([])
-    const [newAssignment, setNewAssignment] = useState({
+    let [assignments, setAssignments] = useState([])
+    let [newAssignment, setNewAssignment] = useState({
       assignmentGrade: '',
       assignmentCategory: ''
     })  
@@ -29,6 +29,13 @@ function Assignments() {
   
     return (
       <>
+      {/* <ul> */}
+        {assignments.map(assignment => (
+        <li>{assignment.assignmentGrade}</li>,
+        <button onClick={() => assignments.filter(assignment)}>Remove</button>
+        ))}
+
+      {/* </ul> */}
       <form>
       <div>
         <input 
@@ -57,4 +64,4 @@ function Assignments() {
     )
   }
 
-export default Assignments;
+export default AssignmentsForm;
