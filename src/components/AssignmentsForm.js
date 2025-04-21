@@ -18,7 +18,7 @@ function AssignmentsForm() {
     function handleSubmit(e) {
       e.preventDefault();
       setAssignments(previousAssignments => [...previousAssignments, newAssignment]);
-      setKeyNumber(keyNumber += 1)
+      setKeyNumber(keyNumber + 1)
       console.log(newAssignment)
       setNewAssignment({
         assignmentGrade: '',
@@ -52,7 +52,7 @@ if(setupFinished == false) {
   )
 } else {
   return (  
-<>
+    <>
 
     <div>
       {assignments.map(assignment => {
