@@ -13,24 +13,23 @@ function AssignmentsForm() {
       assignmentCategory: '',
       key: keyNumber
     })
-    let setupFinished = false;  
+    let [ setupFinished, setSetupFinished ] = useState(false)
   
     function handleSubmit(e) {
-      e.preventDefault();
+      e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
       setAssignments(previousAssignments => [...previousAssignments, newAssignment]);
       setKeyNumber(keyNumber + 1)
-      console.log(newAssignment)
+      console.log(assignments)
       setNewAssignment({
         assignmentGrade: '',
         assignmentCategory: '',
         key: {keyNumber}
       })
   
-  
     }
     function handleChange(e) {
       const { name, value } = e.target;
-      setNewAssignment(previousNewAssignments => ({
+      setNewAssignment(previousNewAssignments => ({ // https://stackoverflow.com/questions/54676966/push-method-in-react-hooks-usestate
         ...previousNewAssignments,
         [name]: value
       }));
@@ -46,7 +45,7 @@ if(setupFinished == false) {
   return(
     <>
     <form>
-      <button type="submit" onClick={() => setupFinished = true} ></button>
+      <button type="submit" onClick={() => setSetupFinished(true)} ></button>
     </form>
    </>
   )
@@ -55,7 +54,7 @@ if(setupFinished == false) {
     <>
 
     <div>
-      {assignments.map(assignment => {
+      {assignments.map(assignment => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
           <>
             <p key={assignment.key}>{assignment.assignmentGrade}</p>
