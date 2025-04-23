@@ -4,9 +4,10 @@ function AssignmentsForm() {
 
     let [keyNumber, setKeyNumber] = useState(1)
     let [assignments, setAssignments] = useState([])
-    let [categories, setCategories] = useState({
+    let [categories, setCategories] = useState([])
+    let [newCategory, setNewCategories] = useState({
       category: '',
-      weighting: 0
+      weighting: 0,
     })
     let [newAssignment, setNewAssignment] = useState({
       assignmentGrade: '',
@@ -15,7 +16,7 @@ function AssignmentsForm() {
     })
     let [ setupFinished, setSetupFinished ] = useState(false)
   
-    function handleSubmit(e) {
+    function handleSubmitForAssignments(e) {
       e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
       setAssignments(previousAssignments => [...previousAssignments, newAssignment]);
       setKeyNumber(keyNumber + 1)
@@ -27,7 +28,22 @@ function AssignmentsForm() {
       })
   
     }
-    function handleChange(e) {
+
+    function handleSubmitForCategories(e) {
+      e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
+      setCategories(previousCategories => [...previousCategories, newCategory]);
+      // setKeyNumber(keyNumber + 1)
+      console.log(categories)
+      setNewCategories({
+        category: '',
+        weighting: ''
+        // key: {keyNumber}
+      })
+      
+  
+    }
+
+    function handleChangeForAssignments(e) {
       const { name, value } = e.target;
       setNewAssignment(previousNewAssignments => ({ // https://stackoverflow.com/questions/54676966/push-method-in-react-hooks-usestate
         ...previousNewAssignments,
@@ -35,30 +51,65 @@ function AssignmentsForm() {
       }));
     }
 
-    function handleRemove(assignment) {
+    function handleChangeForCategories(e) {
+      const { name, value } = e.target;
+      setNewCategories(previousNewCategories => ({
+        ...previousNewCategories,
+        [name]: value
+      }));
+    }
+
+    function handleRemoveForAssignments(assignment) {
       let filteredAssignments = assignments.filter(otherGrades => otherGrades !== assignment)
       setAssignments(filteredAssignments)
       console.log(assignments)
     }
 
+    function handleRemoveForCategories(category) {
+      let filteredCategories = categories.filter(otherCategories => otherCategories !== category)
+      setCategories(filteredCategories)
+      console.log(categories)
+    }
+
 if(setupFinished == false) {
   return(
     <>
+    {categories.map(category => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
+      return(
+          <>
+            <p>{category.weighting} {category.category}</p>
+            <button onClick={() => handleRemoveForCategories(category)}>Remove</button>
+          </>
+        );
+      })}
     <form>
-      <button type="submit" onClick={() => setSetupFinished(true)} ></button>
+      <input
+      type="number"
+       name="weighting"
+       placeholder='Enter weighting of class'
+       value={newCategory.weighting}
+       onChange={handleChangeForCategories}>
+       </input>
+       <input
+       name="category"
+       placeholder='Enter assignment category'
+       value={newCategory.category}
+       onChange={handleChangeForCategories}>
+       </input>
+      <button onClick={handleSubmitForCategories} >Enter New Category</button>
+      <button onClick={() => setSetupFinished(true)} >Finish</button>
     </form>
    </>
   )
 } else {
   return (  
     <>
-
     <div>
       {assignments.map(assignment => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
           <>
             <p key={assignment.key}>{assignment.assignmentGrade}</p>
-            <button onClick={() => handleRemove(assignment)}>Remove</button>
+            <button onClick={() => handleRemoveForAssignments(assignment)}>Remove</button>
           </>
         );
       })}
@@ -69,7 +120,7 @@ if(setupFinished == false) {
           name="assignmentGrade"
           placeholder='Enter assignment/assessment grade' 
           value={newAssignment.assignmentGrade}
-          onChange={handleChange}
+          onChange={handleChangeForAssignments}
           />
           
         </div>
@@ -77,14 +128,15 @@ if(setupFinished == false) {
           <select
           name="assignmentCategory"
           value={newAssignment.assignmentCategory}
-          onChange={handleChange}
+          onChange={handleChangeForAssignments}
           >
             <option value="">Select an assignment type</option>
             <option value="Assignment">Assignment</option>
             <option value="Assessment">Summative Assessment</option>
           </select>
         </div>
-        <button type="submit" onClick={handleSubmit}>Add Assignment</button>
+        <button type="submit" onClick={handleSubmitForAssignments}>Add Assignment</button>
+        <button onClick={() => setSetupFinished(false)}>Go Back!</button>
         </form>
         </div>
         
