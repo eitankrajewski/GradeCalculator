@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function AssignmentsForm() {
+
+
 
     let [keyNumber, setKeyNumber] = useState(1)
     let [assignments, setAssignments] = useState([])
     let [categories, setCategories] = useState([])
     let [newCategory, setNewCategories] = useState({
-      category: '',
+      categoryType: '',
       weighting: 0,
     })
     let [newAssignment, setNewAssignment] = useState({
@@ -15,6 +17,11 @@ function AssignmentsForm() {
       key: keyNumber
     })
     let [ setupFinished, setSetupFinished ] = useState(false)
+
+    useEffect(() => {
+
+      console.log("Selection value updated ", newAssignment.assignmentCategory)
+    }, [newAssignment])
   
     function handleSubmitForAssignments(e) {
       e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
@@ -35,7 +42,7 @@ function AssignmentsForm() {
       // setKeyNumber(keyNumber + 1)
       console.log(categories)
       setNewCategories({
-        category: '',
+        categoryType: '',
         weighting: ''
         // key: {keyNumber}
       })
@@ -45,10 +52,17 @@ function AssignmentsForm() {
 
     function handleChangeForAssignments(e) {
       const { name, value } = e.target;
-      setNewAssignment(previousNewAssignments => ({ // https://stackoverflow.com/questions/54676966/push-method-in-react-hooks-usestate
-        ...previousNewAssignments,
-        [name]: value
-      }));
+      if (name == 'categoryType') {
+        setNewAssignment(previousNewAssignments => ({
+          ...previousNewAssignments,
+          assignmentCategory: value
+        }));
+      } else {
+        setNewAssignment(previousNewAssignments => ({ // https://stackoverflow.com/questions/54676966/push-method-in-react-hooks-usestate
+          ...previousNewAssignments,
+          [name]: value
+        }));
+      }
     }
 
     function handleChangeForCategories(e) {
@@ -77,7 +91,7 @@ if(setupFinished == false) {
     {categories.map(category => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
           <>
-            <p>{category.weighting} {category.category}</p>
+            <p>{category.weighting} {category.categoryType}</p>
             <button onClick={() => handleRemoveForCategories(category)}>Remove</button>
           </>
         );
@@ -91,9 +105,9 @@ if(setupFinished == false) {
        onChange={handleChangeForCategories}>
        </input>
        <input
-       name="category"
+       name="categoryType"
        placeholder='Enter assignment category'
-       value={newCategory.category}
+       value={newCategory.categoryType}
        onChange={handleChangeForCategories}>
        </input>
       <button onClick={handleSubmitForCategories} >Enter New Category</button>
@@ -125,14 +139,20 @@ if(setupFinished == false) {
           
         </div>
         <div>
-          <select
-          name="assignmentCategory"
-          value={newAssignment.assignmentCategory}
-          onChange={handleChangeForAssignments}
+          <select 
+          name="categoryType"
+          value={newCategory.categoryType}
+          onChange={(e) => setNewAssignment(previousNewAssignments => ({
+            ...previousNewAssignments,
+            assignmentCategory: e.target.value
+          }))}
           >
             {categories.map((category) => { // https://stackoverflow.com/questions/63095583/looping-through-an-array-in-react-and-adding-them-to-a-select-option
-              return <option value={category}
-              >{category.category}</option>
+              return(
+                <> 
+                <option value={category.categoryType}>{category.categoryType}</option>
+                </>
+              )
               })}
           </select>
         </div>
