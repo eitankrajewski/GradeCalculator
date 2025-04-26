@@ -130,13 +130,9 @@ if(setupFinished == false) {
           value={newAssignment.assignmentCategory}
           onChange={handleChangeForAssignments}
           >
-            {/* <option value="">Select an assignment type</option>
-            <option value="Assignment">Assignment</option>
-            <option value="Assessment">Summative Assessment</option> */}
             {categories.map((category) => { // https://stackoverflow.com/questions/63095583/looping-through-an-array-in-react-and-adding-them-to-a-select-option
-              return <option value={category} onSelect={() => 
-                category.category
-              }></option>
+              return <option value={category}
+              >{category.category}</option>
               })}
           </select>
         </div>
