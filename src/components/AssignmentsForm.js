@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 
 function AssignmentsForm() {
 
-
-
+    let [gradeNeeded, setGradeNeeded] = useState(0)
+    let [desiredCategory, setDesiredCategory] = useState(0)
+    let [desiredFinalGrade, setDesiredFinalGrade] = useState(0)
     let [keyNumber, setKeyNumber] = useState(1)
     let [assignments, setAssignments] = useState([])
     let [categories, setCategories] = useState([])
@@ -85,6 +86,42 @@ function AssignmentsForm() {
       console.log(categories)
     }
 
+    function handleGrading() {
+      let weightDesired = 0;
+
+      categories.forEach(category => {
+        weightDesired = category.categoryType == desiredCategory ? category.weighting : 0;
+      });
+
+      categories.forEach(category => {
+        let total = 0;
+        let numberOfAssignments = 0;
+        if(category.categoryType != desiredCategory) {
+          assignments.forEach(assignment => {
+            total += assignment.assignmentGrade
+            numberOfAssignments += 1
+          })
+          total = (total / numberOfAssignments) * weightDesired
+          setGradeNeeded(gradeNeeded + total)
+          total = 0;
+        }
+      });
+      
+      let total = 0;
+      let numberOfAssignments = 0;
+      assignments.forEach(assignment => {
+        if(assignment.assignmentCategory == desiredCategory) {
+          total += assignment.assignmentGrade
+          numberOfAssignments += 1;
+        }
+      })
+      total = (total / numberOfAssignments) * weightDesired
+      setGradeNeeded(((desiredFinalGrade - gradeNeeded) / weightDesired) - total)
+
+      // console.log(desiredCategory)
+      // setGradeNeeded()
+    }
+
 if(setupFinished == false) {
   return(
     <>
@@ -140,8 +177,8 @@ if(setupFinished == false) {
         </div>
         <div>
           <select 
-          name="categoryType"
-          value={newCategory.categoryType}
+          name="assignmentCategory"
+          value={newAssignment.assignmentCategory}
           onChange={(e) => setNewAssignment(previousNewAssignments => ({
             ...previousNewAssignments,
             assignmentCategory: e.target.value
@@ -157,7 +194,36 @@ if(setupFinished == false) {
           </select>
         </div>
         <button type="submit" onClick={handleSubmitForAssignments}>Add Assignment</button>
-        <button onClick={() => setSetupFinished(false)}>Go Back!</button>
+        <div>
+          <h1>What is the last assignment to be input?</h1>
+        <select 
+          name="desiredCategory"
+          value={desiredCategory}
+          onChange={(e) => setDesiredCategory(e.target.value)}
+          >
+            {categories.map((category) => { // https://stackoverflow.com/questions/63095583/looping-through-an-array-in-react-and-adding-them-to-a-select-option
+              return(
+                <> 
+                <option value={category.categoryType}>{category.categoryType}</option>
+                </>
+              )
+              })}
+          </select>
+          <input 
+          type="number" 
+          name="desiredFinalGrade"
+          placeholder='Enter final assignment/assessment grade needed' 
+          value={desiredFinalGrade}
+          onChange={(e) => setDesiredFinalGrade(e.target.value)}
+          />
+          <button type="button" onClick={() => handleGrading()}>
+            Calculate!
+          </button>
+        </div>
+        <div>
+          <h1>{gradeNeeded}</h1>
+        </div>
+        <button type="submit" onClick={() => setSetupFinished(false)}>Go Back!</button>
         </form>
         </div>
         
