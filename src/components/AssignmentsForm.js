@@ -19,10 +19,10 @@ function AssignmentsForm() {
     })
     let [ setupFinished, setSetupFinished ] = useState(false)
 
-    useEffect(() => {
+    // useEffect(() => {
 
-      console.log("Selection value updated ", newAssignment.assignmentCategory)
-    }, [newAssignment])
+    //   console.log("Selection value updated ", newAssignment.assignmentCategory)
+    // }, [newAssignment])
   
     function handleSubmitForAssignments(e) {
       e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
@@ -88,38 +88,47 @@ function AssignmentsForm() {
 
     function handleGrading() {
       let weightDesired = 0;
+      setGradeNeeded(0);
 
       categories.forEach(category => {
-        weightDesired = category.categoryType == desiredCategory ? category.weighting : 0;
+        weightDesired = (category.categoryType == desiredCategory ? (category.weighting / 100) : 0);
       });
 
       categories.forEach(category => {
         let total = 0;
         let numberOfAssignments = 0;
-        if(category.categoryType != desiredCategory) {
-          assignments.forEach(assignment => {
-            total += assignment.assignmentGrade
-            numberOfAssignments += 1
-          })
-          total = (total / numberOfAssignments) * weightDesired
-          setGradeNeeded(gradeNeeded + total)
-          total = 0;
-        }
+        let currentWeighting = 0;
+        assignments.forEach(assignment => {
+          // console.log(assignment.assignmentCategory)
+          // console.log(desiredCategory)
+          if(String(assignment.assignmentCategory) !== String(desiredCategory) && String(assignment.assignmentCategory) === String(category.categoryType)) {
+            total += parseInt(assignment.assignmentGrade);
+            numberOfAssignments += 1;
+            currentWeighting = parseInt(category.weighting) / 100;
+            }
+          console.log(total)
+          console.log(currentWeighting)
+        })
+        
+        total = (total / numberOfAssignments) * (parseInt(currentWeighting))
+          // console.log(total)
+          
+        setGradeNeeded(gradeNeeded + total)
       });
-      
-      let total = 0;
-      let numberOfAssignments = 0;
-      assignments.forEach(assignment => {
-        if(assignment.assignmentCategory == desiredCategory) {
-          total += assignment.assignmentGrade
-          numberOfAssignments += 1;
-        }
-      })
-      total = (total / numberOfAssignments) * weightDesired
-      setGradeNeeded(((desiredFinalGrade - gradeNeeded) / weightDesired) - total)
 
-      // console.log(desiredCategory)
-      // setGradeNeeded()
+      // console.log(gradeNeeded)
+      
+      // let total = 0;
+      // let numberOfAssignments = 0;
+      // assignments.forEach(assignment => {
+      //   if(String(assignment.assignmentCategory) == String(desiredCategory)) {
+      //     total += parseInt(assignment.assignmentGrade)
+      //     numberOfAssignments += 1;
+      //   }
+      // })
+      // total = (total / numberOfAssignments) * weightDesired
+      // setGradeNeeded(((desiredFinalGrade - gradeNeeded) / weightDesired) - total)
+
     }
 
 if(setupFinished == false) {
