@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 function AssignmentsForm() {
 
     let [gradeNeeded, setGradeNeeded] = useState(0)
-    let [desiredCategory, setDesiredCategory] = useState(0)
+    let [desiredCategory, setDesiredCategory] = useState("")
     let [desiredFinalGrade, setDesiredFinalGrade] = useState(0)
     let [keyNumber, setKeyNumber] = useState(1)
     let [assignments, setAssignments] = useState([])
@@ -19,21 +19,68 @@ function AssignmentsForm() {
     })
     let [ setupFinished, setSetupFinished ] = useState(false)
 
-    // useEffect(() => {
+    useEffect(() => {
+      let data = window.localStorage.getItem("CATEGORIES");
+      if(data) {
+        setCategories(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("GRADE_NEEDED");
+      if(data) {
+        setGradeNeeded(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("DESIRED_CATEGORY");
+      if(data) {
+        setDesiredCategory(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("DESIRED_FINAL_GRADE");
+      if(data) {
+        setDesiredFinalGrade(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("KEY_NUMBER");
+      if(data) {
+        setKeyNumber(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("ASSIGNMENTS");
+      if(data) {
+        setAssignments(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("NEW_CATEGORY");
+      if(data) {
+        setNewAssignment(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("NEW_ASSIGNMENT");
+      if(data) {
+        setNewAssignment(JSON.parse(data))
+      }
+      data = window.localStorage.getItem("SETUP_FINISHED");
+      if(data) {
+        setSetupFinished(JSON.parse(data))
+      }
+    }, [])
 
-    //   console.log("Selection value updated ", newAssignment.assignmentCategory)
-    // }, [newAssignment])
+    useEffect(() => {
+      window.localStorage.setItem("GRADE_NEEDED", JSON.stringify(gradeNeeded));
+      window.localStorage.setItem("DESIRED_CATEGORY", JSON.stringify(desiredCategory));
+      window.localStorage.setItem("DESIRED_FINAL_GRADE", JSON.stringify(desiredFinalGrade));
+      window.localStorage.setItem("KEY_NUMBER", JSON.stringify(keyNumber));
+      window.localStorage.setItem("ASSIGNMENTS", JSON.stringify(assignments));
+      window.localStorage.setItem("CATEGORIES", JSON.stringify(categories));
+      window.localStorage.setItem("NEW_CATEGORY", JSON.stringify({newCategory}));
+      window.localStorage.setItem("NEW_ASSIGNMENT", JSON.stringify({newAssignment}));
+      window.localStorage.setItem("SETUP_FINISHED", JSON.stringify(setupFinished));
+    }, [gradeNeeded, desiredCategory, desiredFinalGrade, keyNumber, assignments, categories,
+      newCategory, newAssignment, setupFinished]);
   
     function handleSubmitForAssignments(e) {
       e.preventDefault(); // https://stackoverflow.com/questions/23427384/get-form-data-in-react
       setAssignments(previousAssignments => [...previousAssignments, newAssignment]);
-      setKeyNumber(keyNumber + 1)
-      console.log(assignments)
+      setKeyNumber(k => k + 1)
       setNewAssignment({
         assignmentGrade: '',
         assignmentCategory: '',
         key: {keyNumber}
       })
+      console.log(assignments)
   
     }
 
@@ -45,15 +92,22 @@ function AssignmentsForm() {
       setNewCategories({
         categoryType: '',
         weighting: ''
-        // key: {keyNumber}
       })
-      
-  
+
+      // let total = 0;
+      // categories.forEach(category => {
+      //     total += parseInt(category.weighting);
+      // });
+      // if(total === 100) {
+      //   updateTotalIs100();
+      // } else {
+      //   updateTotalIs100();
+      // }
     }
 
     function handleChangeForAssignments(e) {
       const { name, value } = e.target;
-      if (name == 'categoryType') {
+      if (name === 'categoryType') {
         setNewAssignment(previousNewAssignments => ({
           ...previousNewAssignments,
           assignmentCategory: value
@@ -87,57 +141,55 @@ function AssignmentsForm() {
     }
 
     function handleGrading() {
-      let weightDesired = 0;
+      let currentWeighting = 0;
+      let totalGrade = 0;
+      let totalForAssignments = 0;
+      let totalNumberOfAssignments = 0;
       setGradeNeeded(0);
 
       categories.forEach(category => {
-        weightDesired = (category.categoryType == desiredCategory ? (category.weighting / 100) : 0);
-      });
-
-      categories.forEach(category => {
-        let total = 0;
-        let numberOfAssignments = 0;
-        let currentWeighting = 0;
-        assignments.forEach(assignment => {
-          // console.log(assignment.assignmentCategory)
-          // console.log(desiredCategory)
-          if(String(assignment.assignmentCategory) !== String(desiredCategory) && String(assignment.assignmentCategory) === String(category.categoryType)) {
-            total += parseInt(assignment.assignmentGrade);
-            numberOfAssignments += 1;
-            currentWeighting = parseInt(category.weighting) / 100;
+        totalForAssignments = 0;
+        totalNumberOfAssignments = 0;
+        if(category.categoryType !== desiredCategory) {
+          currentWeighting = parseInt(category.weighting) / 100;
+          assignments.forEach(assignment => {
+            if(assignment.assignmentCategory === category.categoryType) {
+              totalForAssignments += parseFloat(assignment.assignmentGrade)
+              totalNumberOfAssignments += 1;
             }
-          console.log(total)
-          console.log(currentWeighting)
-        })
-        
-        total = (total / numberOfAssignments) * (parseInt(currentWeighting))
-          // console.log(total)
-          
-        setGradeNeeded(gradeNeeded + total)
-      });
+          })
+          if(totalNumberOfAssignments !== 0) {
+            totalGrade += (totalForAssignments / totalNumberOfAssignments) * currentWeighting
+          }
+        }
+      })
 
-      // console.log(gradeNeeded)
-      
-      // let total = 0;
-      // let numberOfAssignments = 0;
-      // assignments.forEach(assignment => {
-      //   if(String(assignment.assignmentCategory) == String(desiredCategory)) {
-      //     total += parseInt(assignment.assignmentGrade)
-      //     numberOfAssignments += 1;
-      //   }
-      // })
-      // total = (total / numberOfAssignments) * weightDesired
-      // setGradeNeeded(((desiredFinalGrade - gradeNeeded) / weightDesired) - total)
+      totalForAssignments = 0;
+      totalNumberOfAssignments = 1;
+      categories.forEach(category => {
+        if(category.categoryType === desiredCategory) {
+          currentWeighting = parseInt(category.weighting) / 100;
+          assignments.forEach(assignment => {
+            if(assignment.assignmentCategory === category.categoryType) {
+              totalForAssignments += parseFloat(assignment.assignmentGrade)
+              totalNumberOfAssignments += 1;
+            }
+          })
+        }
+      })
+
+
+      setGradeNeeded((((desiredFinalGrade - totalGrade)*(totalNumberOfAssignments)/currentWeighting) - totalForAssignments))
 
     }
 
-if(setupFinished == false) {
+if(setupFinished === false) {
   return(
     <>
     {categories.map(category => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
           <>
-            <p>{category.weighting} {category.categoryType}</p>
+            <p>Category Weighting: {category.weighting} Category Type: {category.categoryType}</p>
             <button onClick={() => handleRemoveForCategories(category)}>Remove</button>
           </>
         );
@@ -157,7 +209,23 @@ if(setupFinished == false) {
        onChange={handleChangeForCategories}>
        </input>
       <button onClick={handleSubmitForCategories} >Enter New Category</button>
-      <button onClick={() => setSetupFinished(true)} >Finish</button>
+      <button onClick={(e) => {
+        e.preventDefault();
+        let total = 0;
+        categories.forEach(category => {
+          total += parseInt(category.weighting);
+        });
+        if(categories.length === 0) {
+          console.log("Insert more categories!")
+        } else if(total !== 100) {
+          console.log(total)
+          console.log("Weighting doesn't add up to 100!")
+        } else {
+          setSetupFinished(true)
+        }
+      }
+      } >Finish</button>
+      {/* {!totalIs100 && <div>Total is not 100!</div>} */}
     </form>
    </>
   )
@@ -168,7 +236,7 @@ if(setupFinished == false) {
       {assignments.map(assignment => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
           <>
-            <p key={assignment.key}>{assignment.assignmentGrade}</p>
+            <p key={assignment.key}>Assignment Grade: {assignment.assignmentGrade} Assignment Category: {assignment.assignmentCategory}</p>
             <button onClick={() => handleRemoveForAssignments(assignment)}>Remove</button>
           </>
         );
@@ -193,6 +261,7 @@ if(setupFinished == false) {
             assignmentCategory: e.target.value
           }))}
           >
+            <option default value="">Select a category</option>
             {categories.map((category) => { // https://stackoverflow.com/questions/63095583/looping-through-an-array-in-react-and-adding-them-to-a-select-option
               return(
                 <> 
@@ -201,15 +270,21 @@ if(setupFinished == false) {
               )
               })}
           </select>
+          {newAssignment.assignmentCategory === "" && <div>Select an option from the dropdown!</div>}
         </div>
-        <button type="submit" onClick={handleSubmitForAssignments}>Add Assignment</button>
+        <button disabled={newAssignment.assignmentCategory === ""} 
+        type="submit" 
+        onClick={handleSubmitForAssignments}>
+          Add Assignment
+          </button>
         <div>
-          <h1>What is the last assignment to be input?</h1>
+          <h1>What is the last assignment type to be graded, and what is the desired ending grade?</h1>
         <select 
           name="desiredCategory"
           value={desiredCategory}
           onChange={(e) => setDesiredCategory(e.target.value)}
           >
+            <option value="">Select a category</option>
             {categories.map((category) => { // https://stackoverflow.com/questions/63095583/looping-through-an-array-in-react-and-adding-them-to-a-select-option
               return(
                 <> 
@@ -225,9 +300,10 @@ if(setupFinished == false) {
           value={desiredFinalGrade}
           onChange={(e) => setDesiredFinalGrade(e.target.value)}
           />
-          <button type="button" onClick={() => handleGrading()}>
+          <button disabled={desiredCategory === ""}type="button" onClick={() => handleGrading()}>
             Calculate!
           </button>
+          {desiredCategory === "" && <div>Select an option from the dropdown!</div>}
         </div>
         <div>
           <h1>{gradeNeeded}</h1>
