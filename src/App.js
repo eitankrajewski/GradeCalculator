@@ -8,9 +8,6 @@ import Header from './components/Header'
 function GradeCalculator() {
   return (
     <>
-    <Header/>
-    <GradeManager/>
-    
     <div className="background-app">
     <div className="background-grades">
          <div className="display-grade">

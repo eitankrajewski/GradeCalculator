@@ -2,14 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #baf2f7;
+  background-color: white;
   min-height: 100vh;
 }
 .background-grades {
-  background-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
-  width: 50rem;
-  height: 25rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.1);
+  width: 75rem;
+  height: auto;
   text-align: center;
   padding: 10px;
   border-radius: 2rem;
@@ -21,6 +21,6 @@
 }
 
 .assignments {
-  padding-top: 10rem;
-  background-color: rgba(255, 255, 255, 0.3)
+  padding-top: 2rem;
 }
+

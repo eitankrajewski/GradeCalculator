@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "./AssignmentsForm.css"
 
 function AssignmentsForm() {
 
@@ -186,15 +187,28 @@ function AssignmentsForm() {
 if(setupFinished === false) {
   return(
     <>
+    <div className="category-container">
     {categories.map(category => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
-          <>
-            <p>Category Weighting: {category.weighting} Category Type: {category.categoryType}</p>
-            <button onClick={() => handleRemoveForCategories(category)}>Remove</button>
-          </>
+          <div className="category-card">
+            <div className="remove-button-container">
+              <button className="remove-button" onClick={() => handleRemoveForCategories(category)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg></button>
+            </div>
+            {/* <p>Category Weighting: <hr/>{category.weighting} <br/>Category Type: {category.categoryType}</p> */}
+            <p className="subtitle">
+            <svg className="icons" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#AAAAAA"><path d="M240-320h320v-80H240v80Zm0-160h480v-80H240v80Zm-80 320q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg> 
+               Category Name:<hr/></p>
+            <p className="data-values">{category.categoryType}</p>
+            <p className="subtitle">
+            <svg className="icons" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#AAAAAA"><path d="M80-120v-80h360v-447q-26-9-45-28t-28-45H240l120 280q0 50-41 85t-99 35q-58 0-99-35t-41-85l120-280h-80v-80h247q12-35 43-57.5t70-22.5q39 0 70 22.5t43 57.5h247v80h-80l120 280q0 50-41 85t-99 35q-58 0-99-35t-41-85l120-280H593q-9 26-28 45t-45 28v447h360v80H80Zm585-320h150l-75-174-75 174Zm-520 0h150l-75-174-75 174Zm335-280q17 0 28.5-11.5T520-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760q0 17 11.5 28.5T480-720Z"/></svg> 
+              Category Weighting:<hr/></p>
+            <p className="data-values">{category.weighting}</p>
+          </div>
         );
       })}
+    </div>
     <form>
+      <div>
       <input
       type="number"
        name="weighting"
@@ -209,6 +223,7 @@ if(setupFinished === false) {
        onChange={handleChangeForCategories}>
        </input>
       <button onClick={handleSubmitForCategories} >Enter New Category</button>
+    </div>
       <button onClick={(e) => {
         e.preventDefault();
         let total = 0;
@@ -233,14 +248,25 @@ if(setupFinished === false) {
   return (  
     <>
     <div>
+      <div className="assignment-container">
       {assignments.map(assignment => { // https://stackoverflow.com/questions/38282997/rendering-an-array-map-in-react
       return(
-          <>
-            <p key={assignment.key}>Assignment Grade: {assignment.assignmentGrade} Assignment Category: {assignment.assignmentCategory}</p>
-            <button onClick={() => handleRemoveForAssignments(assignment)}>Remove</button>
-          </>
+          <div className="assignment-card">
+            <div className="remove-button-container">
+              <button className="remove-button" onClick={() => handleRemoveForAssignments(assignment)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg></button>
+            </div>
+            <p className="subtitle">
+            <svg className="icons" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#AAAAAA"><path d="M657-121 544-234l56-56 57 57 127-127 56 56-183 183Zm-537 1v-80h360v80H120Zm0-160v-80h360v80H120Zm0-160v-80h720v80H120Zm0-160v-80h720v80H120Zm0-160v-80h720v80H120Z"/></svg>
+              Assignment Grade:<hr/></p>
+            <p className="data-values">{assignment.assignmentGrade}</p>
+            <p className="subtitle">
+            <svg className="icons" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#AAAAAA"><path d="m260-520 220-360 220 360H260ZM700-80q-75 0-127.5-52.5T520-260q0-75 52.5-127.5T700-440q75 0 127.5 52.5T880-260q0 75-52.5 127.5T700-80Zm-580-20v-320h320v320H120Zm580-60q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm-500-20h160v-160H200v160Zm202-420h156l-78-126-78 126Zm78 0ZM360-340Zm340 80Z"/></svg>
+              Assignment Category:<hr/></p>
+            <p className="data-values">{assignment.assignmentCategory}</p>
+          </div>
         );
       })}
+      </div>
       <form>
         <div>
           <input 
