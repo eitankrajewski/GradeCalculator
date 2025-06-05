@@ -11,7 +11,7 @@ function GradeCalculator() {
     <div className="background-app">
     <div className="background-grades">
          <div className="display-grade">
-           Grade Calculator
+           Grade Calculator<hr className="overall-separation"/>
            <br />
          </div>
          <div className="assignments">

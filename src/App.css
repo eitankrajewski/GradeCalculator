@@ -18,9 +18,18 @@
 .display-grade {
   font-size: xx-large;
   padding-top: 50px;
+  padding-left: 50px;
+  justify-items: left;
 }
 
 .assignments {
   padding-top: 2rem;
 }
 
+.overall-separation {
+  width: 500px;
+  height: 1px;
+  background-color: white;
+  border: 0;
+  margin-top:5px;
+}
