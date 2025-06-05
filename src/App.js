@@ -1,8 +1,8 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import './App.css'
 import AssignmentsForm from './components/AssignmentsForm'
-import GradeManager from './components/GradeManager'
-import Header from './components/Header'
+// import GradeManager from './components/GradeManager'
+// import Header from './components/Header'
 
 
 function GradeCalculator() {
